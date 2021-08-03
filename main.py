@@ -8,14 +8,14 @@ project_id = 'nobeta'
 dataset = 'requisicoes'
 client = bigquery.Client(credentials= credentials,project=project_id)
 
-# TODO Adicionar campos request size status response 
+
 query = """select timestamp,
     httpRequest.requestUrl as url,
     httpRequest.userAgent as useragent,
     httpRequest.referer as referer,
     httpRequest.latency as latency,
     jsonpayload_type_loadbalancerlogentry.statusdetails as details,
-    insertId
+    insertId, httpRequest.responseSize as size, httpRequest.status as status
  from `nobeta.scriptnobeta.requests_20210802` limit 20;"""
 
 query_job = client.query(query)
@@ -39,13 +39,13 @@ for objeto in objetos:
 
     grupo[ index ].add( objeto )
 
-# calcular média de latência por bloco
 for (key, item) in grupo.items():
+# calcular média de latência por bloco
     item.calculaMedia()
-
-# contar navegador e device
-
-# contar response
+# contar device e browser
+    item.contadorDeviceBrowser()
+# contar response/details
+    item.contadorResponse()
 
 # calcular média e a soma de tamanho do script
 
