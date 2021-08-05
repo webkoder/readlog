@@ -16,7 +16,7 @@ query = """select timestamp,
     httpRequest.latency as latency,
     jsonpayload_type_loadbalancerlogentry.statusdetails as details,
     insertId, httpRequest.responseSize as size, httpRequest.status as status
- from `nobeta.scriptnobeta.requests_20210802` limit 20;"""
+ from `nobeta.scriptnobeta.requests_20210802` limit 50;"""
 
 query_job = client.query(query)
 
@@ -46,13 +46,22 @@ for (key, item) in grupo.items():
     item.contadorDeviceBrowser()
 # contar response/details
     item.contadorResponse()
-
-# calcular média e a soma de tamanho do script
-
 # contar status http
-
+    item.contadorStatus()
+# calcular média e a soma de tamanho do script
+    item.calculaMediaScript()
 # Contar referer url geral
+    item.contadorReferer()
 
 
 for (key, item) in grupo.items():
     print( item )
+
+
+# TODO criar uma tabela com os campos da classe contador e gravar 
+# os mesmo, incluindo a data do consulta 
+
+
+# Criar um job para fazer a chamada do main
+
+# Criar uma tabela para gravar notificação de urls com caracteres especiais

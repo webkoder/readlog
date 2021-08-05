@@ -19,7 +19,9 @@ class Registro:
     def parserUserAgent(self):
         useragent = httpagentparser.detect(self.useragent)
         self.device = useragent['platform']['name']
-        self.browser = useragent['browser']['name']
+
+        self.browser = 'browser' in useragent \
+            and useragent['browser']['name'] or 'Navegador desconhecido! ' 
 
     def __str__(self) -> str:
         return self.bloco + " | " + \

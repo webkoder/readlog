@@ -7,6 +7,11 @@ class Contador:
         self.device = {}
         self.browser = {}
         self.response = {}
+        self.status = {}
+        self.avgsize = 0
+        self.sumsize = 0
+        self.latency = 0.0
+        self.referer = {}
 
 
     def add( self, item ):
@@ -18,7 +23,11 @@ class Contador:
                str(self.latency) + " Device | " + \
                str(self.device) + " Browser | " + \
                str(self.browser) + " Response | " + \
-               str(self.response) 
+               str(self.response) + " Status | " + \
+               str(self.status) + " Size Media| " + \
+               str(self.avgsize) + " Size Soma| " + \
+               str(self.sumsize) + " Url Geral| " + \
+               str(self.referer)
 
     def calculaMedia( self ):
         latencias = [ x.latency for x in self.dados ]
@@ -47,4 +56,26 @@ class Contador:
                 self.response[index] = 0
             self.response[ index ] = self.response[ index ] +1
 
+    def contadorStatus( self ):
+        
+        for registro in self.dados:
+            index = registro.status
+
+            if index not in self.status:
+                self.status[index] = 0
+            self.status[ index ] = self.status[ index ] +1
+
+    def calculaMediaScript( self ):
+        script = [ x.size for x in self.dados ]
+        self.avgsize = np.average( script )
+        self.sumsize = np.sum( script )
+
+    def contadorReferer( self ):
+        
+        for registro in self.dados:
+            index = registro.referer
+
+            if index not in self.referer:
+                self.referer[index] = 0
+            self.referer[ index ] = self.referer[ index ] +1
      
