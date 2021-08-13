@@ -2,12 +2,16 @@ from google.cloud import bigquery
 from google.oauth2 import service_account
 from Registro import Registro
 from Contador import Contador
+from Orm import Orm
+from datetime import date,timedelta
+
 credentials = service_account.Credentials.from_service_account_file( 'nobetabigquery.json' )
 
 project_id = 'nobeta'
 dataset = 'requisicoes'
 client = bigquery.Client(credentials= credentials,project=project_id)
-
+data = date.today() - timedelta(days=1)
+dataf = data.strftime('%Y%m%d')
 
 query = """select timestamp,
     httpRequest.requestUrl as url,
@@ -16,7 +20,7 @@ query = """select timestamp,
     httpRequest.latency as latency,
     jsonpayload_type_loadbalancerlogentry.statusdetails as details,
     insertId, httpRequest.responseSize as size, httpRequest.status as status
- from `nobeta.scriptnobeta.requests_20210802` limit 50;"""
+ from `nobeta.scriptnobeta.requests_"""+dataf+"""` limit 2000;"""
 
 query_job = client.query(query)
 
@@ -55,12 +59,16 @@ for (key, item) in grupo.items():
 
 
 for (key, item) in grupo.items():
+    item.data = data
+    Orm.gravar(item.toTupla())
     print( item )
 
+Orm.fecharCursor()
 
-# TODO criar uma tabela com os campos da classe contador e gravar 
-# os mesmo, incluindo a data do consulta 
 
+# TODO latency(dois campos: desktop, mobile)
+# criar dois campos para contar os devices(desktop, mobile)
+# criar campo de contagem geral de registros  
 
 # Criar um job para fazer a chamada do main
 

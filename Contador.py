@@ -12,6 +12,7 @@ class Contador:
         self.sumsize = 0
         self.latency = 0.0
         self.referer = {}
+        self.data = None
 
 
     def add( self, item ):
@@ -66,7 +67,13 @@ class Contador:
             self.status[ index ] = self.status[ index ] +1
 
     def calculaMediaScript( self ):
-        script = [ x.size for x in self.dados ]
+        script = [ x.size is not None and x.size or 0  for x in self.dados ]
+        # script = []
+        # for x in self.dados:
+        #     if( x.size is not None ):
+        #         script.append( x.size )
+            
+
         self.avgsize = np.average( script )
         self.sumsize = np.sum( script )
 
@@ -79,3 +86,5 @@ class Contador:
                 self.referer[index] = 0
             self.referer[ index ] = self.referer[ index ] +1
      
+    def toTupla (self):
+        return ( self.bloco, str(self.device), str(self.browser), str(self.response), str(self.status), float(self.avgsize), float(self.sumsize), float(self.latency), str(self.referer), str(self.data))
