@@ -1,14 +1,18 @@
-urls = [
-    'https://api.nobeta.com.br/nobetaads&id=maisnovela.inter',
-    'https://api.nobeta.com.br/nobetaads&id=maisnovela',
-    'https://api.nobeta.com.br/nobetaads&id=maisnovela.inter&f=alert,inter',
-    'https://api.nobeta.com.br/nobetaads&id=maisnovela&f=alert,inter',
-    'https://api.nobeta.com.br/nobetaads&id=jornaldefato.blogspot.inter',
-    'https://api.nobeta.com.br/nobetaads&id=jornaldefato.blogspot.inter&f=alert,inter'
-]
 
-for url in urls:
-    indexid = url.index("&id=") + 4
-    txt = url[indexid:].replace('.inter', '')
-    txt = txt.split('&')[0]
-    print( txt )
+from datetime import date,timedelta
+
+data = date.today() - timedelta(days=1)
+dataf = data.strftime('%Y%m%d')
+
+query = """select timestamp,
+    httpRequest.requestUrl as url,
+    httpRequest.userAgent as useragent,
+    httpRequest.referer as referer,
+    httpRequest.latency as latency,
+    jsonpayload_type_loadbalancerlogentry.statusdetails as details,
+    insertId, httpRequest.responseSize as size, httpRequest.status as status
+ from `nobeta.scriptnobeta.requests_"""+dataf+"""` limit 50;"""
+
+print(query)
+
+

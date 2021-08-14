@@ -9,15 +9,19 @@ class Registro:
         self.latency = row[4]
         self.response = row[5]
         self.id = row[6]
+        self.size = row[7]
+        self.status = row[8] 
 
         self.parserUserAgent()
         self.extractSite()
         self.extractDate()
 
     def parserUserAgent(self):
-        useragent = httpagentparser.simple_detect(self.useragent)
-        self.device = useragent[0]
-        self.browser = useragent[1]
+        useragent = httpagentparser.detect(self.useragent)
+        self.device = useragent['platform']['name']
+
+        self.browser = 'browser' in useragent \
+            and useragent['browser']['name'] or 'Navegador desconhecido! ' 
 
     def __str__(self) -> str:
         return self.bloco + " | " + \

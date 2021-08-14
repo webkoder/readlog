@@ -1,3 +1,6 @@
 __pycache__
 .vscode
 nobetabigquery.json
+venv
+.idea
+db.py
