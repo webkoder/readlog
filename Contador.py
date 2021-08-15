@@ -21,7 +21,8 @@ class Contador:
     def __str__( self ):
         return self.bloco + ". " + \
                str(len( self.dados )) + " itens | " + \
-               str(self.latency) + " Device | " + \
+               str(self.latencymobile) + " Mobile | " + \
+               str(self.latencydesktop) + " Desktop | " + \
                str(self.device) + " Browser | " + \
                str(self.browser) + " Response | " + \
                str(self.response) + " Status | " + \
@@ -30,12 +31,42 @@ class Contador:
                str(self.sumsize) + " Url Geral| " + \
                str(self.referer)
 
+    def contadorCategoria( self ):
+    
+        mobile = 0
+        desktop = 0
+        outros  = 0
+        for registro in self.dados:
+            if  registro.categoria == 1:
+                mobile += 1
+            elif registro.categoria == 2:
+                desktop += 1
+            else:
+                outros += 1
+        self.categorias = {'mobile': mobile, 'desktop': desktop, 'outros': outros}
+    
     def calculaMedia( self ):
-        latencias = [ x.latency for x in self.dados ]
-        self.latency = np.average( latencias )
+    
+        latenciaMobile = []
+        latenciaDesktop = []
+        for registro in self.dados:
+            if  registro.categoria == 1:
+                latenciaMobile.append(registro.latency)
+            elif registro.categoria == 2:
+                latenciaDesktop.append(registro.latency)
+
+        if  not latenciaMobile:
+            self.latencymobile = 0 
+        else:
+            self.latencymobile = np.average( latenciaMobile )
+       
+        if  not latenciaDesktop:
+            self.latencydesktop = 0 
+        else:
+            self.latencydesktop = np.average( latenciaDesktop )
 
     def contadorDeviceBrowser( self ):
-        
+
         for registro in self.dados:
             indexD = registro.device
             indexB = registro.browser
@@ -68,12 +99,7 @@ class Contador:
 
     def calculaMediaScript( self ):
         script = [ x.size is not None and x.size or 0  for x in self.dados ]
-        # script = []
-        # for x in self.dados:
-        #     if( x.size is not None ):
-        #         script.append( x.size )
-            
-
+        
         self.avgsize = np.average( script )
         self.sumsize = np.sum( script )
 
@@ -87,4 +113,4 @@ class Contador:
             self.referer[ index ] = self.referer[ index ] +1
      
     def toTupla (self):
-        return ( self.bloco, str(self.device), str(self.browser), str(self.response), str(self.status), float(self.avgsize), float(self.sumsize), float(self.latency), str(self.referer), str(self.data))
+        return ( self.bloco, str(self.device), str(self.browser), str(self.response), str(self.status), float(self.avgsize), float(self.sumsize), float(self.latencymobile), float(self.latencydesktop), str(self.categorias), str(self.referer), str(self.data))
