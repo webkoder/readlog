@@ -3,14 +3,20 @@ from google.oauth2 import service_account
 from Registro import Registro
 from Contador import Contador
 from Orm import Orm
-from datetime import date,timedelta
+from datetime import date, datetime,timedelta
+import sys
 
 credentials = service_account.Credentials.from_service_account_file( 'nobetabigquery.json' )
 
 project_id = 'nobeta'
 dataset = 'requisicoes'
 client = bigquery.Client(credentials= credentials,project=project_id)
-data = date.today() - timedelta(days=1)
+
+if len(sys.argv) == 1:
+    data = date.today() - timedelta(days=1)
+else:
+    data = datetime.strptime(sys.argv[1],'%Y-%m-%d')
+
 dataf = data.strftime('%Y%m%d')
 
 query = """select timestamp,
@@ -20,7 +26,7 @@ query = """select timestamp,
     httpRequest.latency as latency,
     jsonpayload_type_loadbalancerlogentry.statusdetails as details,
     insertId, httpRequest.responseSize as size, httpRequest.status as status
- from `nobeta.scriptnobeta.requests_"""+dataf+"""` limit 2000;"""
+ from `nobeta.scriptnobeta.requests_"""+dataf+"""` limit 20;"""
 
 query_job = client.query(query)
 
@@ -56,6 +62,8 @@ for (key, item) in grupo.items():
     item.calculaMediaScript()
 # Contar referer url geral
     item.contadorReferer()
+# Contar categoria por device
+    item.contadorCategoria()
 
 
 for (key, item) in grupo.items():
@@ -66,10 +74,6 @@ for (key, item) in grupo.items():
 Orm.fecharCursor()
 
 
-# TODO latency(dois campos: desktop, mobile)
-# criar dois campos para contar os devices(desktop, mobile)
-# criar campo de contagem geral de registros  
-
-# Criar um job para fazer a chamada do main
+# TODO
 
 # Criar uma tabela para gravar notificação de urls com caracteres especiais
