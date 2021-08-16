@@ -1,4 +1,5 @@
-import httpagentparser
+from user_agents import parse 
+
 
 class Registro:
     def __init__(self, row):
@@ -17,9 +18,18 @@ class Registro:
         self.extractDate()
 
     def parserUserAgent(self):
-        useragent = httpagentparser.detect(self.useragent)
-        self.device = useragent['platform']['name']
-        self.browser = useragent['browser']['name']
+        useragent = parse (self.useragent)
+        self.device = useragent.device.family
+
+        self.browser = useragent.browser.family
+
+        if useragent.is_mobile | useragent.is_tablet:
+            self.categoria = 1
+        elif useragent.is_pc:
+            self.categoria = 2
+        else:
+            self.categoria = 3 
+
 
     def __str__(self) -> str:
         return self.bloco + " | " + \
