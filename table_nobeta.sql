@@ -12,7 +12,6 @@ avgsize float null ,
 sumsize float null,
 latencymobile float null,
 latencydesktop float null,
-referer text null ,
 data date null,
 primary key (id));
 
@@ -22,7 +21,7 @@ select * from estatistica;
 CREATE TABLE acesso(
 id int auto_increment not null,
 bloco varchar(80) null ,
-referer varchar(255) null ,
+referer varchar(512) null ,
 contagem int null, 
 mes int null,
 ano int null, 

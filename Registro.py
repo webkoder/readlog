@@ -13,9 +13,20 @@ class Registro:
         self.size = row[7]
         self.status = row[8] 
 
-        self.parserUserAgent()
+        self.validar()
+        #self.parserUserAgent()
         self.extractSite()
         self.extractDate()
+
+    def validar(self):
+        if self.referer is None:
+            return
+        if self.useragent is None:
+            return
+
+        if len(self.referer) > 512:
+            print(self.referer)
+            raise Exception('Erro! ')
 
     def parserUserAgent(self):
         useragent = parse (self.useragent)
