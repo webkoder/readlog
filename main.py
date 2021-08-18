@@ -61,7 +61,7 @@ for (key, item) in grupo.items():
 # calcular média e a soma de tamanho do script
     item.calculaMediaScript()
 # Contar referer url geral
-    item.contadorReferer()
+ #   item.contadorReferer()
 # Contar categoria por device
     item.contadorCategoria()
 
@@ -76,4 +76,5 @@ Orm.fecharCursor()
 
 # TODO
 
+# Criar tabela só para gravar refer
 # Criar uma tabela para gravar notificação de urls com caracteres especiais

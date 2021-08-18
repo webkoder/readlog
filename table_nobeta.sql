@@ -18,3 +18,14 @@ primary key (id));
 
 
 select * from estatistica;
+
+CREATE TABLE acesso(
+id int auto_increment not null,
+bloco varchar(80) null ,
+referer varchar(255) null ,
+contagem int null, 
+mes int null,
+ano int null, 
+primary key (id));
+
+select * from acesso;
