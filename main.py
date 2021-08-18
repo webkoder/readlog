@@ -13,7 +13,7 @@ dataset = 'requisicoes'
 client = bigquery.Client(credentials= credentials,project=project_id)
 
 if len(sys.argv) == 1:
-    data = date.today() - timedelta(days=1)
+    data = date.today()  - timedelta(days=1)
 else:
     data = datetime.strptime(sys.argv[1],'%Y-%m-%d')
 
@@ -26,7 +26,7 @@ query = """select timestamp,
     httpRequest.latency as latency,
     jsonpayload_type_loadbalancerlogentry.statusdetails as details,
     insertId, httpRequest.responseSize as size, httpRequest.status as status
- from `nobeta.scriptnobeta.requests_"""+dataf+"""` limit 20;"""
+ from `nobeta.scriptnobeta.requests_"""+dataf+"""` limit 200000;"""
 
 query_job = client.query(query)
 
@@ -38,6 +38,7 @@ for row in results:
     o = Registro(row)
     objetos.append( o )
 
+print('Já transformei os registro em objetos. ')
 
 # agrupar por bloco
 grupo = {}
@@ -68,12 +69,12 @@ for (key, item) in grupo.items():
 
 for (key, item) in grupo.items():
     item.data = data
-    Orm.gravar(item.toTupla())
-    print( item )
+    Orm.gravaEstatistica(item.dadosEstatistica())
+    Orm.gravaAcesso(item.dadosAcesso())
+    print(item)
 
 Orm.fecharCursor()
 
 
 # TODO
-
 # Criar uma tabela para gravar notificação de urls com caracteres especiais

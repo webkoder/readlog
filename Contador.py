@@ -112,5 +112,14 @@ class Contador:
                 self.referer[index] = 0
             self.referer[ index ] = self.referer[ index ] +1
      
-    def toTupla (self):
-        return ( self.bloco, str(self.device), str(self.browser), str(self.response), str(self.status), float(self.avgsize), float(self.sumsize), float(self.latencymobile), float(self.latencydesktop), str(self.categorias), str(self.referer), str(self.data))
+    def dadosEstatistica (self):
+        return ( self.bloco, str(self.categorias), str(self.device), str(self.browser), str(self.response), str(self.status), float(self.avgsize), float(self.sumsize), float(self.latencymobile), float(self.latencydesktop),  str(self.data))
+
+    def dadosAcesso (self):
+        ano = self.data.year
+        mes = self.data.month
+
+        lista = []
+        for referer, contagem in self.referer.items():
+            lista.append ((self.bloco,referer,contagem, mes, ano ))
+        return lista 
