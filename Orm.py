@@ -1,4 +1,5 @@
 from db import  cursor, con 
+import mysql.connector
 
 class Orm:
 
@@ -12,8 +13,13 @@ class Orm:
     def gravaAcesso (valores):
        sql = "INSERT INTO acesso ( bloco, referer, contagem, mes, ano )  VALUES \
        ( %s , %s , %s , %s ,%s )"
-       cursor.executemany(sql,valores)
 
+       for dados in valores: 
+         try:
+          cursor.execute(sql,dados)
+         except mysql.connector.Error as err:
+          print(dados)
+      
     @staticmethod
     def fecharCursor():
        cursor.close()
