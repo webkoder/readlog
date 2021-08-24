@@ -1,35 +1,38 @@
 from user_agents import parse 
+from TrataCampos import TrataCampos
 
 
 class Registro:
     def __init__(self, row):
+        self.tratador = TrataCampos(row)
         self.timestamp = row[0]
-        self.url = row[1]
-        self.useragent = row[2]
-        self.referer = row[3]
-        self.latency = row[4]
-        self.response = row[5]
-        self.id = row[6]
-        self.size = row[7]
-        self.status = row[8] 
+        
+        self.url = self.tratador.getUrl()
 
-        self.validar()
-        #self.parserUserAgent()
+        self.useragent = self.tratador.getUseragent()
+        self.referer = self.tratador.getReferer()
+        self.latency = self.tratador.getLatency()
+        self.response = self.tratador.getResponse()
+        self.id = self.tratador.getId()
+        self.size = self.tratador.getSize()
+        self.status = self.tratador.getStatus()
+
+        self.bloco = 'nao-inicializado'
+        self.browser = 'nao-inicializado'
+        self.device = 'nao-inicializado'
+        
         self.extractSite()
         self.extractDate()
-
-    def validar(self):
-        if self.referer is None:
-            return
-        if self.useragent is None:
-            return
-
-        if len(self.referer) > 512:
-            print(self.referer)
-            raise Exception('Erro! ')
+        self.parserUserAgent()
+          
 
     def parserUserAgent(self):
-        useragent = parse (self.useragent)
+        try:
+            useragent = parse (self.useragent)
+        except:
+            print(self.useragent)
+            raise("erro ao converter o user agent")
+
         self.device = useragent.device.family
 
         self.browser = useragent.browser.family
@@ -43,12 +46,20 @@ class Registro:
 
 
     def __str__(self) -> str:
-        return self.bloco + " | " + \
+        try:
+            response = self.bloco + " | " + \
+               self.useragent + " | " + \
+               self.url + " | " + \
+               self.response + " | " + \
                self.date + " | " + \
                self.device + " | " + \
                self.browser + " | " + \
                str(self.latency) + " | " + \
                self.referer
+        except:
+            print( self.id )
+            raise("erro na concatenaçao")
+        return response
 
     def extractDate(self):
         self.date = self.timestamp.strftime("%Y-%m-%d")
@@ -57,4 +68,7 @@ class Registro:
         indexid = self.url.index("&id=") + 4
         txt = self.url[indexid:].replace('.inter', '')
         txt = txt.split('&')[0]
-        self.bloco = txt
+        if( isinstance( txt, str) is not True ):
+            print( self )
+            raise("erro ao obter o bloco de " + self.url)
+        self.bloco = self.tratador.getBloco(txt)

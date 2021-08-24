@@ -20,7 +20,7 @@ class Contador:
 
     def __str__( self ):
         return self.bloco + ". " + \
-               str(len( self.dados )) + " itens | " + \
+              str(len( self.dados )) + " itens | " + \
                str(self.latencymobile) + " Mobile | " + \
                str(self.latencydesktop) + " Desktop | " + \
                str(self.device) + " Browser | " + \
@@ -29,7 +29,7 @@ class Contador:
                str(self.status) + " Size Media| " + \
                str(self.avgsize) + " Size Soma| " + \
                str(self.sumsize) + " Url Geral| " + \
-               str(self.referer)
+               str(self.referer) 
 
     def contadorCategoria( self ):
     
