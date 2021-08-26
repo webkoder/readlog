@@ -4,7 +4,7 @@ import mysql.connector
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
-def contest(request):
+def contest():
     db = os.environ.get('MYSQLPY')
     db = json.loads(db)
     con = mysql.connector.connect(host=db['host'],database=db['database'],user=db['user'],password=db['password'])
@@ -21,9 +21,9 @@ def contest(request):
     return sites
 
 
-def bqtest(request):
+def bqtest():
     print( 'teste de conexão com banco de dados MySQL' )
-    sites = contest(request)
+    sites = contest()
 
     project_id = 'nobeta'
     credentials = service_account.Credentials.from_service_account_file( 'nobetabigquery.json' )
@@ -45,4 +45,4 @@ def bqtest(request):
         return str(row[1]) + " | Sites " + sites
 
 
-print ( bqtest(None) )
+print ( bqtest() )
