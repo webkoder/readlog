@@ -1,6 +1,4 @@
-
 from main import principal
 
 
-principal()
-
+principal(None)

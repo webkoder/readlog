@@ -4,19 +4,17 @@ from Registro import Registro
 from Contador import Contador
 from Orm import Orm
 from datetime import date, datetime,timedelta
-import sys
 
-def principal():
+def principal(request):
     credentials = service_account.Credentials.from_service_account_file( 'nobetabigquery.json' )
 
     project_id = 'nobeta'
-    dataset = 'requisicoes'
     client = bigquery.Client(credentials= credentials,project=project_id)
 
-    if len(sys.argv) == 1:
+    if 'data' not in request.args:
         data = date.today()  - timedelta(days=1)
     else:
-        data = datetime.strptime(sys.argv[1],'%Y-%m-%d')
+        data = datetime.strptime(request.args['data'],'%Y-%m-%d')
 
     dataf = data.strftime('%Y%m%d')
 
@@ -27,12 +25,12 @@ def principal():
         httpRequest.latency as latency,
         jsonpayload_type_loadbalancerlogentry.statusdetails as details,
         insertId, httpRequest.responseSize as size, httpRequest.status as status
-    from `nobeta.scriptnobeta.requests_"""+dataf+"""` ;"""
+    from `nobeta.scriptnobeta.requests_"""+dataf+"""`;"""
 
     query_job = client.query(query)
 
     results = query_job.result()
-    print('Dados obtidos! ')
+    # print('Dados obtidos! ')
     # transforma o resultado em uma array de objetos
     objetos = []
     c = 0
@@ -46,7 +44,7 @@ def principal():
             print (str(a*1000) + ' registros processados')
             c = 0
 
-    print('Já transformei os registro em objetos. ')
+    # print('Já transformei os registro em objetos. ')
 
     # agrupar por bloco
     grupo = {}
@@ -87,6 +85,10 @@ def principal():
 
     Orm.fecharCursor()
 
-    print ( 'finalizado!' )
+    res = 'finalizado com ' + str( len(grupo) ) + ' sites gravados.'
+    res += ' Dia do dataset: ' + dataf
+
+    # print ( res )
+    return res
     # TODO
     # Criar uma tabela para gravar notificação de urls com caracteres especiais
