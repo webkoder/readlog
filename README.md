@@ -15,6 +15,7 @@ O script faz um processamento dos dados para pegar estatística diário e para c
 - Criar um sink dos dados que você deseja no serviço de Logging na GCP, com a saída para o dataset criado anteriormente
 - Criar um acesso de api para o BigQuery na sua conta GCP
 - Ter acesso ao servidor de banco de dados
+**A instrução abaixo só é válido para o Cloud Functions, atualmente o parametro *unix_socket* não é usado**
 - Configurar uma váriável de sistema com o nome de *MYSQLPY* com o seguinte valor
 ```
 {"user":"[user]","password":"[password]","host":"[host]","database":"[database]", socket="[path to socket]"}
@@ -55,4 +56,17 @@ http://192.168.0.106:8080
 Ou para passar a data do processamento:
 ```
 http://192.168.0.106:8080/?data=2021-08-23
+```
+## Deploy na instância do Google Compute Engine
+-Fazer o clone do projeto
+-Criar um ambiente virtual
+-Copiar o arquivo de autenticação
+-Ativar ambiente virtual
+-Baixar as dependencias
+```
+python chamador.py
+```
+ou
+```
+python chamador.py 2021-08-23
 ```

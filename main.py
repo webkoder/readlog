@@ -4,6 +4,7 @@ from Registro import Registro
 from Contador import Contador
 from Orm import Orm
 from datetime import date, datetime,timedelta
+import sys
 
 def principal(request):
     credentials = service_account.Credentials.from_service_account_file( 'nobetabigquery.json' ) # descomentar para testes locais
@@ -11,10 +12,10 @@ def principal(request):
     project_id = 'nobeta'
     client = bigquery.Client(credentials= credentials,project=project_id) # referencia para teste locais
 
-    if 'data' not in request.args:
+    if len(sys.argv) == 1:
         data = date.today()  - timedelta(days=1)
     else:
-        data = datetime.strptime(request.args['data'],'%Y-%m-%d')
+        data = datetime.strptime(sys.argv[1],'%Y-%m-%d')
 
     dataf = data.strftime('%Y%m%d')
 
@@ -25,12 +26,12 @@ def principal(request):
         httpRequest.latency as latency,
         jsonpayload_type_loadbalancerlogentry.statusdetails as details,
         insertId, httpRequest.responseSize as size, httpRequest.status as status
-    from `nobeta.scriptnobeta.requests_"""+dataf+"""`;"""
+    from `nobeta.scriptnobeta.requests_"""+dataf+"""` limit 10;"""
 
     query_job = client.query(query)
 
     results = query_job.result()
-    print('Dados obtidos. ')
+    print('Dados obtidos. ' + dataf)
     # transforma o resultado em uma array de objetos
     objetos = []
     c = 0
