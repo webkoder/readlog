@@ -1,15 +1,18 @@
 from google.cloud import bigquery
-from google.oauth2 import service_account
+# from google.oauth2 import service_account # descomentar para teste local
 from Registro import Registro
 from Contador import Contador
 from Orm import Orm
 from datetime import date, datetime,timedelta
 
 def principal(request):
-    credentials = service_account.Credentials.from_service_account_file( 'nobetabigquery.json' )
+    # TODO Criar uma funnção para retornar o cliente, onde
+    # pode ser selecionado o ambiente de teste ou producao
+    # credentials = service_account.Credentials.from_service_account_file( 'nobetabigquery.json' ) # descomentar para testes locais
 
     project_id = 'nobeta'
-    client = bigquery.Client(credentials= credentials,project=project_id)
+    # client = bigquery.Client(credentials= credentials,project=project_id) # referencia para teste locais
+    client = bigquery.Client(project=project_id)
 
     if 'data' not in request.args:
         data = date.today()  - timedelta(days=1)
