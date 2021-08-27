@@ -28,13 +28,12 @@ def principal(request):
         httpRequest.latency as latency,
         jsonpayload_type_loadbalancerlogentry.statusdetails as details,
         insertId, httpRequest.responseSize as size, httpRequest.status as status
-    from `nobeta.scriptnobeta.requests_"""+dataf+"""`  limit 10"""
+    from `nobeta.scriptnobeta.requests_"""+dataf+"""` """
 
     query_job = client.query(query)
 
     results = query_job.result()
     print('Dados obtidos. ' + dataf)
-    return
     # transforma o resultado em uma array de objetos
     objetos = []
     c = 0
