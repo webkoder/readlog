@@ -1,13 +1,17 @@
 import os
-import json
+from dotenv import load_dotenv
 import mysql.connector
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
 def contest():
-    db = os.environ.get('MYSQLPY')
-    db = json.loads(db)
-    con = mysql.connector.connect(host=db['host'],database=db['database'],user=db['user'],password=db['password'])
+    load_dotenv()
+    host = os.getenv('MYSQL_HOST')
+    user = os.getenv('MYSQL_USER')
+    password = os.getenv('MYSQL_PASSWORD')
+    database = os.getenv('MYSQL_DATABASE')
+
+    con = mysql.connector.connect(host=host,database=database,user=user,password=password)
     cursor = con.cursor()
 
     sites = ''
@@ -26,7 +30,8 @@ def bqtest():
     sites = contest()
 
     project_id = 'nobeta'
-    credentials = service_account.Credentials.from_service_account_file( 'nobetabigquery.json' )
+    path = os.path.dirname(os.path.realpath(__file__)) + os.sep
+    credentials = service_account.Credentials.from_service_account_file( path + 'nobetabigquery.json' )
     client = bigquery.Client(credentials= credentials,project=project_id)
     query = """select timestamp,
         httpRequest.requestUrl as url,

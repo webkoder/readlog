@@ -5,12 +5,14 @@ from Contador import Contador
 from Orm import Orm
 from datetime import date, datetime,timedelta
 import sys
+import os
 
 def principal(request):
-    credentials = service_account.Credentials.from_service_account_file( 'nobetabigquery.json' ) # descomentar para testes locais
+    path = os.path.dirname(os.path.realpath(__file__)) + os.sep
+    credentials = service_account.Credentials.from_service_account_file( path + 'nobetabigquery.json' )
 
     project_id = 'nobeta'
-    client = bigquery.Client(credentials= credentials,project=project_id) # referencia para teste locais
+    client = bigquery.Client(credentials= credentials,project=project_id)
 
     if len(sys.argv) == 1:
         data = date.today()  - timedelta(days=1)
@@ -26,12 +28,13 @@ def principal(request):
         httpRequest.latency as latency,
         jsonpayload_type_loadbalancerlogentry.statusdetails as details,
         insertId, httpRequest.responseSize as size, httpRequest.status as status
-    from `nobeta.scriptnobeta.requests_"""+dataf+"""`"""
+    from `nobeta.scriptnobeta.requests_"""+dataf+"""`  limit 10"""
 
     query_job = client.query(query)
 
     results = query_job.result()
     print('Dados obtidos. ' + dataf)
+    return
     # transforma o resultado em uma array de objetos
     objetos = []
     c = 0
