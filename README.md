@@ -70,3 +70,7 @@ ou
 ```
 python chamador.py 2021-08-23
 ```
+## Deploy no serviço Google Cloud Run (Cloud Shell)
+- Habilitar "Cloud SQL Admin API"
+- Adicionar o unix_socket
+- Adicionar na tela de deploy a linha de conexão SQL

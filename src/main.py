@@ -1,24 +1,15 @@
-from google.cloud import bigquery
-from google.oauth2 import service_account # descomentar para teste local
 from Registro import Registro
 from Contador import Contador
 from Orm import Orm
 from datetime import date, datetime,timedelta
 import sys
-import os
+from bigqueryclient import getClient
+from dataparam import byRequest
 
 def principal(request):
-    path = os.path.dirname(os.path.realpath(__file__)) + os.sep
-    credentials = service_account.Credentials.from_service_account_file( path + 'nobetabigquery.json' )
+    client = getClient()
 
-    project_id = 'nobeta'
-    client = bigquery.Client(credentials= credentials,project=project_id)
-
-    if len(sys.argv) == 1:
-        data = date.today()  - timedelta(days=1)
-    else:
-        data = datetime.strptime(sys.argv[1],'%Y-%m-%d')
-
+    data = byRequest(request)
     dataf = data.strftime('%Y%m%d')
 
     query = """select timestamp,
