@@ -28,6 +28,12 @@ button{
     font-family: 'VT323';
     font-size: 18px;
     text-transform: capitalize;
+    border:3px solid lightgreen;
+}
+
+button:hover{
+    background-color: #333;
+    color: lightgreen;
 }
 
 input{
@@ -57,4 +63,8 @@ aside{
     border-right: 8px double lightgreen;
     padding-right: 10px;
     margin-right: 10px;
+}
+
+.notok{
+    color: salmon;
 }

@@ -3,7 +3,7 @@ A sample Hello World server.
 """
 import os
 # from testbigquery import test
-from testmysql import test as mysqltest
+from mysqldata import MySQLData
 from dataparam import byRequest
 from bigqueryservice import getUrls
 from flask_cors import cross_origin
@@ -29,9 +29,20 @@ def scripturls( ):
     bqurls = getUrls( data )
     urls = []
     for row in bqurls:
-        urls.append( row[0].replace('https://api.nobeta.com.br/nobetaads&id=', '') )
+        url = row[0].replace('https://api.nobeta.com.br/nobetaads&id=', '')
+        url = url.replace('.inter', '')
+        urls.append( url )
 
     return jsonify(urls)
+
+@app.route('/checksites/<data>')
+@cross_origin()
+def checksites( data ):
+    # data = byRequest()
+    db = MySQLData()
+    blocos = db.getData( data )
+
+    return jsonify( blocos )
 
 if __name__ == '__main__':
     server_port = os.environ.get('PORT', '8080')
