@@ -2,9 +2,11 @@
 A sample Hello World server.
 """
 import os
+
+from flask.wrappers import Response
 # from testbigquery import test
 from mysqldata import MySQLData
-from dataparam import byRequest
+from dataparam import defaultValue
 from bigqueryservice import getUrls
 from flask_cors import cross_origin
 
@@ -20,13 +22,18 @@ def hello( ):
 
     return render_template('index.html')
 
-@app.route('/scripturls')
+@app.route('/scripturls', defaults={'data': None})
+@app.route('/scripturls/<data>')
 @cross_origin()
-def scripturls( ):
+def scripturls( data ):
     """Return a list of url from bigquery."""
 
-    data = byRequest()
+    if data is None:
+        data = defaultValue()
     bqurls = getUrls( data )
+    if type( bqurls ) == str:
+        return Response(bqurls, status=404)
+
     urls = []
     for row in bqurls:
         url = row[0].replace('https://api.nobeta.com.br/nobetaads&id=', '')

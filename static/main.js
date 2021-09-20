@@ -2,18 +2,31 @@ var urlbase = "http://localhost:8080/"
 var divscripts = document.getElementById('scripturls');
 var actualdate = null;
 
-function loadUrls(date = ''){
+function loadUrls(){
+    errorReset()
     divscripts.textContent = 'carregando ...';
-    var url = date.length == 0 ? 'scripturls' : '/scripturls/' + date;
+    var url = '/scripturls/' + dateFormat(actualdate) ;
     fetch( urlbase + url )
-        .then( response => response.json())
+        .then( response => {
+            if( response.status == 200)
+                return response.json()
+            else
+                return response.text()
+        })
         .then( resposta => {
+            if (typeof resposta == 'string'){
+                showError( resposta )
+                return
+            }
+
             divscripts.textContent = '';
             resposta.forEach( item => {
                 generateItem( item, divscripts );
             })
         })
-        .catch( err => showError(err) );
+        .catch( err => {
+            showError(err)
+        } );
 }
 
 function checkDatabase(){
@@ -39,6 +52,10 @@ function checkDatabase(){
 function showError(err){
     document.getElementById('errors').innerHTML = "<b>Erro: </b>";
     document.getElementById('errors').innerHTML += err;
+}
+
+function errorReset(){
+    document.getElementById('errors').innerHTML = "";
 }
 
 function divCreate(content, classname){

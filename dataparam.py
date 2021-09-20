@@ -17,3 +17,7 @@ def byRequest( ):
         data = datetime.strptime(request.args['data'],'%Y-%m-%d')
 
     return data
+
+def defaultValue( ):
+    data = date.today()  - timedelta(days=1)
+    return data

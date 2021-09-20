@@ -12,6 +12,11 @@ html, body{
     margin:10px;
 }
 
+#errors{
+    padding:10px;
+    margin:10px;
+}
+
 nav{
     display: flex;
     justify-content: space-between;
