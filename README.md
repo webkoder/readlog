@@ -1,3 +1,6 @@
+# Projeto em refatoração
+Transformando a função em uma aplicação com front-end para verificar e fazer a chamada do scripts em passos, cada url é retornada e processado de forma individual, para evitar erros, processos interrompidos e acompanhar o andamento na própria aplicação. O conteúdo deste documento será atualizado quando o projeto estiver mais avançado.
+
 # Read Log
 Faz a leitura do serviço de logging da GCP através do Big Query acessando via API em Python, com saída para o MySQL.
 
