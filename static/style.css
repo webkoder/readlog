@@ -70,6 +70,12 @@ aside{
     margin-right: 10px;
 }
 
+aside button{
+    display: block;
+    margin-bottom:10px;
+    width:150px
+}
+
 .notok{
     color: salmon;
 }

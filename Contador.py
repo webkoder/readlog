@@ -1,4 +1,5 @@
 import numpy as np
+from datetime import datetime
 
 class Contador:
     def __init__(self, bloco):
@@ -113,11 +114,12 @@ class Contador:
             self.referer[ index ] = self.referer[ index ] +1
      
     def dadosEstatistica (self):
-        return ( self.bloco, str(self.categorias), str(self.device), str(self.browser), str(self.response), str(self.status), float(self.avgsize), float(self.sumsize), float(self.latencymobile), float(self.latencydesktop),  str(self.data))
+        return ( self.bloco, str(self.categorias), str(self.device), str(self.browser), str(self.response), str(self.status), float(self.avgsize), float(self.sumsize), float(self.latencymobile), float(self.latencydesktop),  self.data)
 
     def dadosAcesso (self):
-        ano = self.data.year
-        mes = self.data.month
+        data = datetime.strptime(self.data,'%Y-%m-%d')
+        ano = data.year
+        mes = data.month
 
         lista = []
         for referer, contagem in self.referer.items():

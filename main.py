@@ -1,16 +1,15 @@
 from Registro import Registro
 from Contador import Contador
-from Orm import Orm
+from mysqldata import MySQLData
 from datetime import date, datetime,timedelta
 import sys
 from bigqueryclient import getClient
 from dataparam import byRequest
 
-def principal(request):
+def principal(adunit, data):
     client = getClient()
 
-    data = byRequest(request)
-    dataf = data.strftime('%Y%m%d')
+    dataf = data.replace('-', '')
 
     query = """select timestamp,
         httpRequest.requestUrl as url,
@@ -19,12 +18,12 @@ def principal(request):
         httpRequest.latency as latency,
         jsonpayload_type_loadbalancerlogentry.statusdetails as details,
         insertId, httpRequest.responseSize as size, httpRequest.status as status
-    from `nobeta.scriptnobeta.requests_"""+dataf+"""` """
+    from `nobeta.scriptnobeta.requests_"""+dataf+"""`
+    where httpRequest.requestUrl like 'https://api.nobeta.com.br/nobetaads&id=""" + adunit + """%'; """
 
     query_job = client.query(query)
 
     results = query_job.result()
-    print('Dados obtidos. ' + dataf)
     # transforma o resultado em uma array de objetos
     objetos = []
     c = 0
@@ -41,46 +40,32 @@ def principal(request):
     print('Criado objetos de registros. Preparando o processamento ')
 
     # agrupar por bloco
-    grupo = {}
-    c=0
-    for objeto in objetos:
-        index = objeto.bloco
+    contador = Contador( adunit )
+    contador.data = data
+    contador.dados = objetos
 
-        if index not in grupo:
-            grupo[ index ] = Contador( index )
-
-        grupo[ index ].add( objeto )
-
-    for (key, item) in grupo.items():
     # calcular média de latência por bloco
-        item.calculaMedia()
+    contador.calculaMedia()
     # contar device e browser
-        item.contadorDeviceBrowser()
+    contador.contadorDeviceBrowser()
     # contar response/details
-        item.contadorResponse()
+    contador.contadorResponse()
     # contar status http
-        item.contadorStatus()
+    contador.contadorStatus()
     # calcular média e a soma de tamanho do script
-        item.calculaMediaScript()
+    contador.calculaMediaScript()
     # Contar referer url geral
-        item.contadorReferer()
+    contador.contadorReferer()
     # Contar categoria por device
-        item.contadorCategoria()
-        print (str(c) + ' site processado')
-        c += 1
+    contador.contadorCategoria()
 
-    c = 0
-    for (key, item) in grupo.items():
-        item.data = data
-        Orm.gravaEstatistica(item.dadosEstatistica())
-        Orm.gravaAcesso(item.dadosAcesso())
-        print (str(c) + ' site gravado')
-        c += 1
+    db = MySQLData()
+    db.gravaEstatistica( contador.dadosEstatistica() )
+    db.gravaAcesso( contador.dadosAcesso() )
 
-    Orm.fecharCursor()
+    db.fecharCursor()
 
-    res = 'finalizado com ' + str( len(grupo) ) + ' sites gravados.'
-    res += ' Dia do dataset: ' + dataf
+    return str( len(objetos) )
 
     # print ( res )
     return res

@@ -9,19 +9,22 @@ from mysqldata import MySQLData
 from dataparam import defaultValue
 from bigqueryservice import getUrls
 from flask_cors import cross_origin
+import time
+from main import principal
 
 from flask import Flask, render_template, jsonify
 
 # pylint: disable=C0103
 app = Flask(__name__)
 
-
+# Front end
 @app.route('/')
 def hello( ):
     """Home page"""
 
     return render_template('index.html')
 
+# Load scripts from bigquery
 @app.route('/scripturls', defaults={'data': None})
 @app.route('/scripturls/<data>')
 @cross_origin()
@@ -42,6 +45,7 @@ def scripturls( data ):
 
     return jsonify(urls)
 
+# load data from mysql for checking
 @app.route('/checksites/<data>')
 @cross_origin()
 def checksites( data ):
@@ -50,6 +54,14 @@ def checksites( data ):
     blocos = db.getData( data )
 
     return jsonify( blocos )
+
+# process an url
+@app.route('/process/<data>/<id>')
+@cross_origin()
+def processUrl( data, id ):
+    rows = principal( id, data )
+    return jsonify( {'id':id, 'data': data, 'rows': rows } )
+
 
 if __name__ == '__main__':
     server_port = os.environ.get('PORT', '8080')
