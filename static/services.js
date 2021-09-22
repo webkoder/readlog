@@ -1,4 +1,5 @@
-var urlbase = "http://localhost:8080/"
+var urlbase = "";
+var infomsg = document.getElementById('infomsg');
 var divscripts = document.getElementById('scripturls');
 var actualdate = null;
 
@@ -31,10 +32,12 @@ function loadUrls(){
 }
 
 function checkDatabase(){
+    d('carregando informações no banco de dados');
     url = '/checksites/' + dateFormat(actualdate);
     fetch( urlbase + url )
     .then( response => response.json() )
     .then( resposta => {
+        d('');
         var nresposta = 0;
         var encontrado = 0;
         var naoencontrado = 0

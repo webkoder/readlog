@@ -34,10 +34,10 @@ def principal(adunit, data):
         c += 1
         if( c == 1000 ):
             a += 1
-            print (str(a*1000) + ' registros processados')
+            print (str(a*1000) + ' registros processados ('+adunit+')')
             c = 0
 
-    print('Criado objetos de registros. Preparando o processamento ')
+    print('Criado objetos de registros. Preparando o processamento ('+adunit+')')
 
     # agrupar por bloco
     contador = Contador( adunit )

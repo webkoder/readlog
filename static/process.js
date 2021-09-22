@@ -1,7 +1,10 @@
 var processor = {
     idx: 0,
     list: [],
-    iscomplete: () => processor.list.length <= processor.idx
+    iscomplete: () => {
+        processor.idx++;
+        return processor.list.length <= processor.idx;
+    }
 };
 
 function initProcess(){
@@ -13,18 +16,37 @@ function initProcess(){
     console.log( processor );
 }
 
+function checkItem( item ){
+    return  
+}
+
 function processItem(){
     let item = processor.list[ processor.idx ]
-    let url = '/process/' + item
+
+    if( document.getElementById( item ).children[1].textContent === 'encontrado' ){
+        if( processor.iscomplete() ){
+                d('processamento completo');
+                return
+        }
+        processItem()
+        return
+    }
+
+    let url = `process/${dateFormat(actualdate)}/${item}`;
     fetch( urlbase + url )
         .then( response => response.json() )
         .then( resposta => {
-            let element = document.getElementById(resposta)
-            if( element )
+            let element = document.getElementById( resposta.id )
+            d( `${resposta.id} processado com ${resposta.rows} registros, progresso: ${processor.idx} de ${processor.list.length}` );
+            if( element ){
                 element.children[1].textContent = "processado";
-            processor.idx++
-            if( processor.iscomplete() )
+                element.children[1].className = "status";
+            }
+
+            if( processor.iscomplete() ){
+                d('processamento completo');
                 return
+            }
             processItem()
 
         })

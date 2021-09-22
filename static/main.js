@@ -3,6 +3,10 @@ function showError(err){
     document.getElementById('errors').innerHTML += err;
 }
 
+function d( txt ){
+    document.getElementById('infomsg').innerHTML = txt;
+}
+
 function errorReset(){
     document.getElementById('errors').innerHTML = "";
 }
