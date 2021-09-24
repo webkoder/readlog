@@ -9,9 +9,10 @@ host = os.getenv('MYSQL_HOST')
 user = os.getenv('MYSQL_USER')
 password = os.getenv('MYSQL_PASSWORD')
 database = os.getenv('MYSQL_DATABASE')
+socket = os.getenv('MYSQL_SOCKET')
 
 try:
-    con = mysql.connector.connect(host=host,database=database,user=user,password=password,unix_socket='')
+    con = mysql.connector.connect(host=host,database=database,user=user,password=password,unix_socket=socket)
     cursor = con.cursor()
 except mysql.connector.Error as err:
     print (str(err))
@@ -19,7 +20,7 @@ except mysql.connector.Error as err:
 
 def getCursor():
     try:
-        con = mysql.connector.connect(host=host,database=database,user=user,password=password,unix_socket='')
+        con = mysql.connector.connect(host=host,database=database,user=user,password=password,unix_socket=socket)
         cursor = con.cursor()
     except mysql.connector.Error as err:
         print (str(err))
