@@ -13,6 +13,7 @@ var processor = {
 };
 
 function initProcess(){
+    d('iniciando o processamento: ' + processor.list[processor.idx]);
     onProcess();
     processor.idx = 0;
     processor.list = [];
