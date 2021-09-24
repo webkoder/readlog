@@ -1,4 +1,4 @@
-var urlbase = "";
+var urlbase = "http://192.168.0.109:8080";
 var infomsg = document.getElementById('infomsg');
 var divscripts = document.getElementById('scripturls');
 var actualdate = null;
@@ -20,7 +20,8 @@ function loadUrls(){
                 return
             }
 
-            document.getElementById('urlcount').innerText = resposta.length + ' urls encontradas';
+            document.getElementById('urlcount').innerText = '';
+            bqurls.innerText = resposta.length;
             divscripts.textContent = '';
             resposta.forEach( item => {
                 generateItem( item, divscripts );
@@ -53,11 +54,44 @@ function checkDatabase(){
                 item.children[1].textContent = "não encontrado"
                 item.children[1].className = "status notok"
             }
+        });
+
+        mysqlurls.innerText = encontrado;
+        // document.getElementById('urlchecked').innerText = 
+        //     nresposta + ' registro no banco de dados; ' + 
+        //     encontrado + ' registros encontrados; ' +
+        //     naoencontrado + ' registros não encontrados'
+    } )
+    .catch( err => showError(err) );
+
+}
+
+function checkSummary(){
+    d('carregando informações no banco de dados');
+    url = '/summary';
+    fetch( urlbase + url )
+    .then( response => response.json() )
+    .then( resposta => {
+        d(`${resposta.length} registros de 90 encontrados`);
+
+        [...document.getElementById('lineswrapper').children].map( item => item.className = 'line notok bnotok' )
+
+        resposta.map( item => {
+            if( document.getElementById( item[0]) ){
+                document.getElementById( item[0] ).className = "line";
+                div = divCreate( item[1] + ' itens ', '' );
+                document.getElementById( item[0] ).appendChild( div );
+            }
+
+        });
+        
+        [...document.getElementById('lineswrapper').children].map( item => {
+            if(item.className === 'line notok bnotok'){
+                div = divCreate( 'não encontrado', 'notok' );
+                item.appendChild( div );
+            }
         })
-        document.getElementById('urlchecked').innerText = 
-            nresposta + ' registro no banco de dados; '
-            encontrado + ' registros encontrados' +
-            naoencontrado + ' registros não encontrados'
+        
     } )
     .catch( err => showError(err) );
 

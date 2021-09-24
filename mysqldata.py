@@ -38,6 +38,18 @@ class MySQLData:
 
       self.fecharCursor()
       return data
+
+   def getSummary( self ):
+      # o parametro bind %s não está funcionando, descobrir o motivo
+      sql = ("SELECT data, count(*) as total FROM estatistica group by data order by data desc")
+      self.cursor.execute( sql )
+
+      _data = []
+      for (data, total) in self.cursor:
+         _data.append( (data.isoformat(), total) )
+
+      self.fecharCursor()
+      return _data
       
    def fecharCursor( self ):
       self.cursor.close()

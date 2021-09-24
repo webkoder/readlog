@@ -8,6 +8,7 @@ var processor = {
 };
 
 function initProcess(){
+    // limpar lista
     [...document.getElementsByClassName('line')].
         forEach( item => processor.list.push( item.id ));
 
@@ -32,12 +33,13 @@ function processItem(){
         return
     }
 
-    let url = `process/${dateFormat(actualdate)}/${item}`;
+    let url = `/process/${dateFormat(actualdate)}/${item}`;
     fetch( urlbase + url )
         .then( response => response.json() )
         .then( resposta => {
             let element = document.getElementById( resposta.id )
-            d( `${resposta.id} processado com ${resposta.rows} registros, progresso: ${processor.idx} de ${processor.list.length}` );
+            d( `${resposta.id} processado com ${resposta.rows} registros` );
+            processed.innerText = `${(processor.idx + 1)}/${processor.list.length}`;
             if( element ){
                 element.children[1].textContent = "processado";
                 element.children[1].className = "status";
@@ -50,5 +52,12 @@ function processItem(){
             processItem()
 
         })
-        .catch(err => showError(err))
+        .catch(err => {
+            showError( item + ' ' + err);
+            if( processor.iscomplete() ){
+                d('processamento completo');
+                return
+            }
+            processItem();
+        })
 }

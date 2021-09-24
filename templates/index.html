@@ -19,6 +19,21 @@
             <button id="proximo" class="btn">Próximo &raquo;</button>
         </nav>
 
+        <div id="numbers">
+            <div class="itemnum">
+                <div class="value" id="bqurls">0</div>
+                <div class="label">encontrados (bigquery)</div>
+            </div>
+            <div class="itemnum">
+                <div class="value" id="mysqlurls">0</div>
+                <div class="label">verificados (mysql)</div>
+            </div>
+            <div class="itemnum">
+                <div class="value" id="processed">0</div>
+                <div class="label">processados</div>
+            </div>
+        </div>
+
         <div id="info">
             <span id="urlcount"></span>
             <span id="urlchecked"></span>
@@ -29,11 +44,13 @@
             <aside>
                 <button id="verificar">verificar</button>
                 <button id="processar">processar</button>
+                <a href='resumo.html'>Resumo</a>
             </aside>
             <div id="scripturls"></div>
         </section>
     </div>
 
+    <script src="/static/common.js"></script>
     <script src="/static/process.js"></script>
     <script src="/static/services.js"></script>
     <script src="/static/main.js"></script>

@@ -62,6 +62,14 @@ def processUrl( data, id ):
     rows = principal( id, data )
     return jsonify( {'id':id, 'data': data, 'rows': rows } )
 
+# load data from mysql for checking
+@app.route('/summary')
+@cross_origin()
+def summary():
+    db = MySQLData()
+    datas = db.getSummary( )
+
+    return jsonify( datas )
 
 if __name__ == '__main__':
     server_port = os.environ.get('PORT', '8080')
