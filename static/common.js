@@ -16,6 +16,17 @@ function dateFormat( date ){
     return `${year}-${month}-${day}`;
 }
 
+function datebr( date ){
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    month = month <= 9 ? "0" + month : month;
+    day = day <= 9 ? "0" + day : day;
+
+    return `${day}/${month}/${year}`;
+}
+
 function showError(err){
     document.getElementById('errors').innerHTML = "<b>Erro: </b>";
     document.getElementById('errors').innerHTML += err;

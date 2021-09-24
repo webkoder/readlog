@@ -2,9 +2,14 @@
 var bqurls = document.getElementById('bqurls');
 var mysqlurls = document.getElementById('mysqlurls');
 var processed = document.getElementById('processed');
+var processerrors = document.getElementById('processerrors');
 
 function errorReset(){
     document.getElementById('errors').innerHTML = "";
+    bqurls.innerText = '0';
+    mysqlurls.innerText = '0';
+    processed.innerText = '0';
+    processerrors.innerText = '0';
 }
 
 
@@ -29,22 +34,21 @@ function getActualDate(){
 function handleDatePicker(){
     actualdate = document.getElementById('actual').value;
     actualdate = new Date( actualdate + 'T00:00:00' );
-    // actualdate.setMonth( actualdate.getMonth() + 1 )
-    console.log( actualdate );
 
-    divscripts.innerHTML = "<button onClick='loadUrls()'>carregar informações</button>";
-    // document.getElementById("actual").value = dateFormat( actualdate );
+    navigateTo('');
 }
 
 
 function navigateTo( direction ){
     if( direction == 'previous')
         actualdate.setDate( actualdate.getDate() - 1 );
-    else
+    else if( direction == 'next')
         actualdate.setDate( actualdate.getDate() + 1 );
 
-    divscripts.innerHTML = "<button onClick='loadUrls()'>carregar informações</button>";
+    divscripts.innerHTML = "<button onClick='loadUrls()'>carregar informações do dia "+ datebr( actualdate ) +"</button>";
     document.getElementById("actual").value = dateFormat( actualdate );
+    errorReset();
+
 }
 
 document.getElementById('anterior').addEventListener('click', _ => navigateTo('previous') );

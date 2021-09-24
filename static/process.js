@@ -8,7 +8,7 @@ var processor = {
 };
 
 function initProcess(){
-    // limpar lista
+    processor.list = [];
     [...document.getElementsByClassName('line')].
         forEach( item => processor.list.push( item.id ));
 
@@ -53,6 +53,7 @@ function processItem(){
 
         })
         .catch(err => {
+            processerrors.innerText = parseInt( processerrors.innerText )+1;
             showError( item + ' ' + err);
             if( processor.iscomplete() ){
                 d('processamento completo');

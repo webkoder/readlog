@@ -1,4 +1,6 @@
-var urlbase = "http://192.168.0.109:8080";
+var urlbase = (document.location.href.indexOf(':', 7) === -1)
+    ? '' 
+    : "http://192.168.0.109:8080";
 var infomsg = document.getElementById('infomsg');
 var divscripts = document.getElementById('scripturls');
 var actualdate = null;
@@ -25,7 +27,9 @@ function loadUrls(){
             divscripts.textContent = '';
             resposta.forEach( item => {
                 generateItem( item, divscripts );
-            })
+            });
+
+            checkDatabase();
         })
         .catch( err => {
             showError(err)

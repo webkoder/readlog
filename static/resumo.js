@@ -4,7 +4,7 @@
 var ledate = new Date();
 
 for( var i = 0; i <= 90; i++ ){
-    var div = divCreate( dateFormat(ledate), 'line' );
+    var div = divCreate( datebr(ledate), 'line' );
     div.id = dateFormat(ledate);
     document.getElementById('lineswrapper').appendChild(div);
     ledate.setDate( ledate.getDate() - 1 );
