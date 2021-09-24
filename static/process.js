@@ -4,10 +4,17 @@ var processor = {
     iscomplete: () => {
         processor.idx++;
         return processor.list.length <= processor.idx;
+    },
+    completed: () => {
+        onProcessEnd();
+        d('processamento completo');
     }
+    
 };
 
 function initProcess(){
+    onProcess();
+    processor.idx = 0;
     processor.list = [];
     [...document.getElementsByClassName('line')].
         forEach( item => processor.list.push( item.id ));
@@ -26,7 +33,7 @@ function processItem(){
 
     if( document.getElementById( item ).children[1].textContent === 'encontrado' ){
         if( processor.iscomplete() ){
-                d('processamento completo');
+                processor.completed();
                 return
         }
         processItem()
@@ -46,17 +53,17 @@ function processItem(){
             }
 
             if( processor.iscomplete() ){
-                d('processamento completo');
+                processor.completed();
                 return
             }
             processItem()
-
+            
         })
         .catch(err => {
             processerrors.innerText = parseInt( processerrors.innerText )+1;
             showError( item + ' ' + err);
             if( processor.iscomplete() ){
-                d('processamento completo');
+                processor.completed();
                 return
             }
             processItem();
