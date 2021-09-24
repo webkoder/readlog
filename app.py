@@ -17,12 +17,16 @@ from flask import Flask, render_template, jsonify
 # pylint: disable=C0103
 app = Flask(__name__)
 
-# Front end
 @app.route('/')
 def hello( ):
-    """Home page"""
+    # Front end
 
     return render_template('index.html')
+
+@app.route('/resumo')
+def resumo( ):
+    # tela de resumo
+    return render_template('resumo.html')
 
 # Load scripts from bigquery
 @app.route('/scripturls', defaults={'data': None})
