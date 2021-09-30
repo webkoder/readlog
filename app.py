@@ -23,6 +23,12 @@ def hello( ):
 
     return render_template('index.html')
 
+@app.route('/cdn')
+def cdn( ):
+    # Front end
+
+    return render_template('cdn.html')
+
 @app.route('/resumo')
 def resumo( ):
     # tela de resumo
@@ -37,7 +43,7 @@ def scripturls( data ):
 
     if data is None:
         data = defaultValue()
-    bqurls = getUrls( data )
+    bqurls = getUrls( data, 'script' )
     if type( bqurls ) == str:
         return Response(bqurls, status=404)
 
@@ -45,6 +51,26 @@ def scripturls( data ):
     for row in bqurls:
         url = row[0].replace('https://api.nobeta.com.br/nobetaads&id=', '')
         url = url.replace('.inter', '')
+        urls.append( url )
+
+    return jsonify(urls)
+
+# Load cdn from bigquery
+@app.route('/cdnurls', defaults={'data': None})
+@app.route('/cdnurls/<data>')
+@cross_origin()
+def cdnurls( data ):
+    """Return a list of url from bigquery."""
+
+    if data is None:
+        data = defaultValue()
+    bqurls = getUrls( data, 'cdn' )
+    if type( bqurls ) == str:
+        return Response(bqurls, status=404)
+
+    urls = []
+    for row in bqurls:
+        url = row[0].replace('https://cdn.nobeta.com.br/', '')
         urls.append( url )
 
     return jsonify(urls)
@@ -60,10 +86,10 @@ def checksites( data ):
     return jsonify( blocos )
 
 # process an url
-@app.route('/process/<data>/<id>')
+@app.route('/process/<tipo>/<data>/<id>')
 @cross_origin()
-def processUrl( data, id ):
-    rows = principal( id, data )
+def processUrl( tipo, data, id ):
+    rows = principal( tipo, id, data )
     return jsonify( {'id':id, 'data': data, 'rows': rows } )
 
 # load data from mysql for checking

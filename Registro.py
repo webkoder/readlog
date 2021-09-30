@@ -3,7 +3,8 @@ from TrataCampos import TrataCampos
 
 
 class Registro:
-    def __init__(self, row):
+    def __init__(self, row, tipo):
+        self.tipo = tipo
         self.tratador = TrataCampos(row)
         self.timestamp = row[0]
         
@@ -21,7 +22,10 @@ class Registro:
         self.browser = 'nao-inicializado'
         self.device = 'nao-inicializado'
         
-        self.extractSite()
+        if( tipo == 'script'):
+            self.extractSite()
+        else:
+            self.extractSiteCdn()
         self.extractDate()
         self.parserUserAgent()
           
@@ -64,6 +68,15 @@ class Registro:
     def extractDate(self):
         self.date = self.timestamp.strftime("%Y-%m-%d")
 
+    def extractSite(self):
+        indexid = self.url.index("&id=") + 4
+        txt = self.url[indexid:].replace('.inter', '')
+        txt = txt.split('&')[0]
+        if( isinstance( txt, str) is not True ):
+            print( self )
+            raise("erro ao obter o bloco de " + self.url)
+        self.bloco = self.tratador.getBloco(txt)
+        
     def extractSite(self):
         indexid = self.url.index("&id=") + 4
         txt = self.url[indexid:].replace('.inter', '')

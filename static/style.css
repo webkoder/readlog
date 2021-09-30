@@ -34,6 +34,11 @@ button, a{
     font-size: 18px;
     text-transform: capitalize;
     border:3px solid lightgreen;
+    margin-bottom: 10px;
+}
+
+.btn-warning{
+    background: yellow;
 }
 
 button:hover, a:hover{

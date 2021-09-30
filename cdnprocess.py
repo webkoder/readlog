@@ -6,12 +6,10 @@ import sys
 from bigqueryclient import getClient
 from dataparam import byRequest
 
-def principal(tipo, adunit, data):
+def principal(adunit, data):
     client = getClient()
 
     dataf = data.replace('-', '')
-
-    prefixtipo = 'https://api.nobeta.com.br/nobetaads&id=' if tipo == 'script' else 'https://cdn.nobeta.com.br/'
 
     query = """select timestamp,
         httpRequest.requestUrl as url,
@@ -20,8 +18,8 @@ def principal(tipo, adunit, data):
         httpRequest.latency as latency,
         jsonpayload_type_loadbalancerlogentry.statusdetails as details,
         insertId, httpRequest.responseSize as size, httpRequest.status as status
-    from `nobeta."""+ tipo +"""nobeta.requests_"""+dataf+"""`
-    where httpRequest.requestUrl like '""" + prefixtipo + adunit + """%'; """
+    from `nobeta.scriptnobeta.requests_"""+dataf+"""`
+    where httpRequest.requestUrl like 'https://api.nobeta.com.br/nobetaads&id=""" + adunit + """%'; """
 
     query_job = client.query(query)
 
@@ -31,7 +29,7 @@ def principal(tipo, adunit, data):
     c = 0
     a = 0
     for row in results:
-        o = Registro(row, tipo)
+        o = Registro(row)
         objetos.append( o )
         c += 1
         if( c == 1000 ):

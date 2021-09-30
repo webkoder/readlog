@@ -41,7 +41,7 @@ function processItem(){
         return
     }
 
-    let url = `/process/${dateFormat(actualdate)}/${item}`;
+    let url = `/process/${tipoprocesso}/${dateFormat(actualdate)}/${item}`;
     fetch( urlbase + url )
         .then( response => response.json() )
         .then( resposta => {

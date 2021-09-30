@@ -5,10 +5,10 @@ var infomsg = document.getElementById('infomsg');
 var divscripts = document.getElementById('scripturls');
 var actualdate = null;
 
-function loadUrls(){
+function loadUrls( ){
     errorReset()
     divscripts.textContent = 'carregando ...';
-    var url = '/scripturls/' + dateFormat(actualdate) ;
+    var url = '/'+ tipoprocesso +'urls/' + dateFormat(actualdate) ;
     fetch( urlbase + url )
         .then( response => {
             if( response.status == 200)

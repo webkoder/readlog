@@ -1,7 +1,7 @@
 from bigqueryclient import getClient
 from google import api_core
 
-def getUrls( data ):
+def getUrls( data, tipo ):
     if( type( data ) == str ):
         dataf = data.replace('-', '')
     else:
@@ -10,7 +10,7 @@ def getUrls( data ):
     client = getClient()    
     query = """select 
         httpRequest.requestUrl as url
-    from `nobeta.scriptnobeta.requests_""" + dataf + """` group by httpRequest.requestUrl;"""
+    from `nobeta."""+ tipo +"""nobeta.requests_""" + dataf + """` group by httpRequest.requestUrl;"""
 
     query_job = client.query(query)
     res = None

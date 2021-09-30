@@ -1,3 +1,4 @@
+var tipoprocesso = 'script';
 // numbers
 var bqurls = document.getElementById('bqurls');
 var mysqlurls = document.getElementById('mysqlurls');
@@ -51,11 +52,23 @@ function navigateTo( direction ){
 
 }
 
+function cleanAll(){
+    document.getElementById('scripturls').innerHTML = '';
+}
+
+function handleCdnUrl(){
+    tipoprocesso = 'cdn'
+    cleanAll();
+    loadUrls();
+}
+
 document.getElementById('anterior').addEventListener('click', _ => navigateTo('previous') );
 document.getElementById('proximo').addEventListener('click', _ => navigateTo('next') );
 document.getElementById('verificar').addEventListener('click', _ => checkDatabase() );
 document.getElementById('processar').addEventListener('click', _ => initProcess() );
 document.getElementById('actual').addEventListener('change', _ => handleDatePicker() );
+document.getElementById('limpar').addEventListener('click', _ => cleanAll() );
+document.getElementById('cdnurl').addEventListener('click', _ => handleCdnUrl() );
 
 getActualDate();
 loadUrls();
