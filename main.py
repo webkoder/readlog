@@ -42,7 +42,7 @@ def principal(tipo, adunit, data):
     print('Criado objetos de registros. Preparando o processamento ('+adunit+')')
 
     # agrupar por bloco
-    contador = Contador( adunit )
+    contador = Contador( tipo, adunit )
     contador.data = data
     contador.dados = objetos
 

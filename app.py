@@ -11,6 +11,7 @@ from bigqueryservice import getUrls
 from flask_cors import cross_origin
 import time
 from main import principal
+import urllib.parse
 
 from flask import Flask, render_template, jsonify
 
@@ -89,6 +90,8 @@ def checksites( data ):
 @app.route('/process/<tipo>/<data>/<id>')
 @cross_origin()
 def processUrl( tipo, data, id ):
+    if tipo == 'cdn':
+        id = urllib.parse.unquote( id  )
     rows = principal( tipo, id, data )
     return jsonify( {'id':id, 'data': data, 'rows': rows } )
 

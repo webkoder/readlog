@@ -2,6 +2,7 @@ USE nobeta;
 
 CREATE TABLE estatistica(
 id int auto_increment not null,
+tipo  varchar(20),
 bloco varchar(80) null ,
 categorias varchar (80) null,
 device text null ,

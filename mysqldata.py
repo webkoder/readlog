@@ -13,13 +13,13 @@ class MySQLData:
       self.cursor = d[1]
 
    def gravaEstatistica ( self, valores ):
-      sql = "INSERT INTO estatistica ( bloco, categorias, device, browser, response, status, avgsize, sumsize, latencymobile, latencydesktop, data )  VALUES \
-      ( %s , %s , %s , %s ,%s , %s ,%s , %s ,%s , %s, %s )"
+      sql = "INSERT INTO estatistica ( tipo, bloco, categorias, device, browser, response, status, avgsize, sumsize, latencymobile, latencydesktop, data )  VALUES \
+      ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )"
       self.cursor.execute(sql,valores)
 
    def gravaAcesso (self, valores ):
       sql = "INSERT INTO acesso ( bloco, referer, contagem, mes, ano )  VALUES \
-      ( %s , %s , %s , %s ,%s )"
+      ( %s, %s, %s, %s, %s )"
 
       for dados in valores: 
          try:

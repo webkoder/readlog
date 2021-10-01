@@ -40,6 +40,9 @@ function processItem(){
         processItem()
         return
     }
+    
+    if( tipoprocesso === 'cdn' )
+        item = encodeURIComponent(encodeURIComponent( item ))
 
     let url = `/process/${tipoprocesso}/${dateFormat(actualdate)}/${item}`;
     fetch( urlbase + url )

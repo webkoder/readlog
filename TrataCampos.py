@@ -52,3 +52,43 @@ class TrataCampos:
         if len(txt) > 80:
             return txt[0:80]   
         return txt 
+
+    @staticmethod
+    def extractBlocoCdn( txt ):
+        txt = txt.replace('https://cdn.nobeta.com.br/', '')
+        
+        # vazio
+        if len( txt ) == 0:
+            return 'outros'
+
+        # identificar tag iab.min.js
+        if txt == 'iab.min.js':
+            return txt
+
+        # identificar assinaturas
+        x = re.search("^sign/.*/(.*)\.", txt)
+        if x is not None:
+            res = x[1].replace('sign_', '')
+            return 'sign-' + res
+
+        x = re.search("^sign/(.*)\.", txt)
+        if x is not None:
+            res = x[1].replace('sign_', '')
+            return 'sign-' + res
+
+        # idenfificar tag iab de parceiro
+        x = re.search("^iab-(.*)\.min\.js", txt)
+        if x is not None:
+            return x[1]
+
+        # identificar versão cdn da tag nobeta
+        x = re.search("^sign/(.*)\.", txt)
+        if x is not None:
+            return x[1]
+
+        # midia kit
+        if txt == 'midia/midiakit_2020_nobeta.pdf':
+            return 'midia'
+
+        # agrupar se não encaixar em nenhum item
+        return 'outros'

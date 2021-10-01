@@ -2,7 +2,8 @@ import numpy as np
 from datetime import datetime
 
 class Contador:
-    def __init__(self, bloco):
+    def __init__(self, tipo, bloco):
+        self.tipo = tipo
         self.bloco = bloco
         self.dados = []
         self.device = {}
@@ -114,7 +115,7 @@ class Contador:
             self.referer[ index ] = self.referer[ index ] +1
      
     def dadosEstatistica (self):
-        return ( self.bloco, str(self.categorias), str(self.device), str(self.browser), str(self.response), str(self.status), float(self.avgsize), float(self.sumsize), float(self.latencymobile), float(self.latencydesktop),  self.data)
+        return ( self.tipo, self.bloco, str(self.categorias), str(self.device), str(self.browser), str(self.response), str(self.status), float(self.avgsize), float(self.sumsize), float(self.latencymobile), float(self.latencydesktop),  self.data)
 
     def dadosAcesso (self):
         data = datetime.strptime(self.data,'%Y-%m-%d')
