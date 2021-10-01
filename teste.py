@@ -42,4 +42,4 @@ def extractSiteCdn( txt ):
 for url in urls:
     res = extractSiteCdn( url )
     if res is not None:
-        print ( url, res )
+        print ( url, ' | ', res )

@@ -1,5 +1,6 @@
 from user_agents import parse 
 from TrataCampos import TrataCampos
+import re
 
 
 class Registro:
@@ -78,6 +79,7 @@ class Registro:
         self.bloco = self.tratador.getBloco(txt)
         
     def extractSite(self):
+        # Método exclusivo para script
         indexid = self.url.index("&id=") + 4
         txt = self.url[indexid:].replace('.inter', '')
         txt = txt.split('&')[0]
@@ -85,3 +87,49 @@ class Registro:
             print( self )
             raise("erro ao obter o bloco de " + self.url)
         self.bloco = self.tratador.getBloco(txt)
+
+    def extractSiteCdn( self ):
+        self.url = self.url.replace('https://cdn.nobeta.com.br/', '')
+        
+        # vazio
+        if len( self.url ) == 0:
+            self.bloco = 'outros'
+            return
+
+        # identificar tag iab.min.js
+        if self.url == 'iab.min.js':
+            self.bloco = self.url
+            return
+
+        # identificar assinaturas
+        x = re.search("^sign/.*/(.*)\.", self.url)
+        if x is not None:
+            res = x[1].replace('sign_', '')
+            self.bloco = 'sign-' + res
+            return
+
+        x = re.search("^sign/(.*)\.", self.url)
+        if x is not None:
+            res = x[1].replace('sign_', '')
+            self.bloco = 'sign-' + res
+            return
+
+        # idenfificar tag iab de parceiro
+        x = re.search("^iab-(.*)\.min\.js", self.url)
+        if x is not None:
+            self.bloco = x[1]
+            return
+
+        # identificar versão cdn da tag nobeta
+        x = re.search("^sign/(.*)\.", self.url)
+        if x is not None:
+            self.bloco = x[1]
+            return
+
+        # midia kit
+        if self.url == 'midia/midiakit_2020_nobeta.pdf':
+            self.bloco = 'midia'
+            return
+
+        # agrupar se não encaixar em nenhum item
+        self.bloco = 'outros'
