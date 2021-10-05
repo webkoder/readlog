@@ -39,6 +39,24 @@ class MySQLData:
       self.fecharCursor()
       return data
 
+   def getMonthData( self, month, year, tipo ):
+      sql = ("SELECT * FROM estatistica WHERE MONTH(data) = "+str(month)+" and YEAR(data) = " + str(year) + " AND tipo = '"+ tipo +"'")
+      print( sql )
+      self.cursor.execute( sql )
+
+      data = []
+      cols = ( 'id','tipo','bloco','categorias','device','browser','response','status','avgsize','sumsize','latencymobile','latencydesktop','data' )
+      for linha in self.cursor:
+         o = {}
+         for idx, cel in enumerate(linha):
+            o[cols[idx]] = cel
+
+         data.append( o  )
+
+      self.fecharCursor()
+      return data
+
+
    def getSummary( self ):
       # o parametro bind %s não está funcionando, descobrir o motivo
       sql = ("SELECT data, count(*) as total FROM estatistica group by data order by data desc")

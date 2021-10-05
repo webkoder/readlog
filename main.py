@@ -52,7 +52,7 @@ def principal(tipo, adunit, data):
     contador.contadorDeviceBrowser()
     # contar response/details
     contador.contadorResponse()
-    # contar status http
+    # contar status httpr
     contador.contadorStatus()
     # calcular média e a soma de tamanho do script
     contador.calculaMediaScript()
@@ -63,7 +63,7 @@ def principal(tipo, adunit, data):
 
     db = MySQLData()
     db.gravaEstatistica( contador.dadosEstatistica() )
-    db.gravaAcesso( contador.dadosAcesso() )
+    # db.gravaAcesso( contador.dadosAcesso() )
 
     db.fecharCursor()
 
